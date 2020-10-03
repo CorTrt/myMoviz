@@ -107,7 +107,7 @@ function App() {
 
   const moviesList = moviesDatas.map((movie, i) => {
 
-    var result = movieLikeList.find(element => element.name == movie.name);
+    var result = movieLikeList.find(item => item.name == movie.name);
     var isSee = false
     if(result != undefined){
       isSee = true

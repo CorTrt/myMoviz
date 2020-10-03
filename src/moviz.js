@@ -14,8 +14,6 @@ import { faHeart, faStar, faVideo } from '@fortawesome/free-solid-svg-icons';
 
 function Moovie(props) {
   
-  const [likeMovie, setLikeMovie] = useState(props.liked);
-  const [colorLike, setColorLike] = useState('black');
   const [watchMovie, setWatchMovie] = useState(false);
   const [myRatingMovie, setMyRatingMovie] = useState(5);
   const [countWatchMouvie, setCountWatchMouvie] = useState(0);
@@ -23,16 +21,14 @@ function Moovie(props) {
   const [countRating, setCountRating] = useState(props.movieVote);
   const [alreadyVoted, setAlreadyVoted] = useState(false);
 
-  console.log('PROPS.LIKED', props.liked)
 
-  let clickLike = () => {
-    // setLikeMovie(!likeMovie)
-    if(likeMovie === false){
-      setColorLike('#e74c3C')
+  let colorHeart= ''
+    if(props.liked === true ){
+      colorHeart ='#e74c3C'
     } else {
-      setColorLike('black')
+      colorHeart = ''
     }
-  }
+
 
   let clickWatch = () => {
     setWatchMovie(true);
@@ -101,7 +97,7 @@ function Moovie(props) {
                     <Card>
                       <CardImg top width="100%" src={props.movieImg} alt="Frozen" />
                       <CardBody>
-                        <CardText style={{marginTop:5, marginBottom:5}}> Likes <FontAwesomeIcon onClick={ ()=> {likeListParent( {name: props.movieName, img: props.movieImg} ); clickLike()} } style={{cursor: 'pointer', color: colorLike}} icon={faHeart} /> </CardText>
+                        <CardText style={{marginTop:5, marginBottom:5}}> Likes <FontAwesomeIcon onClick={ ()=> {likeListParent( {name: props.movieName, img: props.movieImg} )} } style={{cursor: 'pointer', color: colorHeart}} icon={faHeart} /> </CardText>
                         <CardText style={{marginTop:5, marginBottom:5}}> Nombre de vues 
                           <FontAwesomeIcon onClick={()=> clickWatch()} style={{cursor: 'pointer', marginLeft: "1em", marginRight: "0.5em"}} icon={faVideo} />
                           ({countWatchMouvie})
