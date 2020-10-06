@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -103,6 +103,22 @@ function App() {
           setMovieLikeList([...movieLikeList.filter((e) => e.name !== movieDatas.name)]);
           setLiked(false);
   }
+
+
+  /* Requette au back collecte des films depuis l'API */
+  useEffect(() => {    
+    
+    let getMoviesDatas = async () => {
+      
+      let rawResponse = await fetch('/likelist-movie');
+      let response = rawResponse.json();
+      
+      console.log(response)
+    }
+
+    getMoviesDatas()
+   
+  }, []);
 
 
   const moviesList = moviesDatas.map((movie, i) => {
