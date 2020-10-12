@@ -33,9 +33,9 @@ router.post('/likelist-movie', async function (req, res, newt) {
 	res.json(true);
 });
 
-/* Supprimer un film de la collection en BDD */
-router.delete('/likelist-movie', async function (req, res, next) {
-	await MovieModel.deleteOne({ title: req.query.title });
+/* Supprimer un film de la @llection en BDD */
+router.delete('/likelist-movie/:title', async function (req, res, next) {
+	await MovieModel.deleteOne({ title: req.params.title });
 
 	res.json(true);
 });

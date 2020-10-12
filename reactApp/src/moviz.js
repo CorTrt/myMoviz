@@ -20,9 +20,8 @@ function Moovie(props) {
 	const [alreadyVoted, setAlreadyVoted] = useState(false);
 	const [longDesc, setLongDesc] = useState(false);
 
-  /* Définition de la couleur des pictos coeur */
-  let colorHeart = '';
-  console.log('PROPS.LIKED ==', props.liked);
+	/* Définition de la couleur des pictos coeur */
+	var colorHeart = '';
 	if (props.liked === true) {
 		colorHeart = '#e74c3C';
 	} else {
@@ -48,19 +47,16 @@ function Moovie(props) {
 		setMyRatingMovie(id);
 	};
 
+	/* Suppression film likeList */
 	let likeListParent = async (movieDatas) => {
-    console.log('MOVIEDATAS ==', movieDatas);
 		if (props.liked === false) {
 			props.addListParent(movieDatas);
 
-			let rawResponse = await fetch(
-				'/likelist-movie',
-				{
-					method: 'POST',
-					headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-					body: `title=${props.movieName}&image=${props.movieImg}`,
-				}
-			);
+			let rawResponse = await fetch('/likelist-movie', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+				body: `title=${props.movieName}&image=${props.movieImg}`,
+			});
 			let response = rawResponse.json();
 		}
 
@@ -133,8 +129,8 @@ function Moovie(props) {
 							<FontAwesomeIcon
 								onClick={() => {
 									likeListParent({
-										name: props.movieName,
-										img: props.movieImg,
+										title: props.movieName,
+										image: props.movieImg,
 									});
 								}}
 								style={{ cursor: 'pointer', color: colorHeart }}

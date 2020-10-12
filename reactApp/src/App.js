@@ -28,7 +28,6 @@ import Moviz from './moviz';
 import './App.css';
 
 function App() {
-
 	const [isOpen, setIsOpen] = useState(false);
 	const [movieLikeList, setMovieLikeList] = useState([]);
 	const [moviesDatas, setMoviesDatas] = useState([]);
@@ -36,42 +35,52 @@ function App() {
 	const [popoverOpen, setPopoverOpen] = useState(false);
 	const toggle = () => setPopoverOpen(!popoverOpen);
 
-
 	/* Ajouter un film en likelist*/
 	let addToList = (movieDatas) => {
 		setMovieLikeList([
 			...movieLikeList,
-			{ name: movieDatas.name, img: movieDatas.img },
+			{ title: movieDatas.title, image: movieDatas.image },
 		]);
 	};
 
-  /* Suppression d'un film de la likelist */
-	let delFromList = (movieDatas) => {
+	/* Suppression d'un film de la likelist */
+	let delFromList = async (movieDatas) => {
+
+		let rawResponse = await fetch(`/likelist-movie/${movieDatas.title}`, {
+			method: 'DELETE',
+		});
+		let response = await rawResponse.json();
+
 		setMovieLikeList([
-			...movieLikeList.filter((e) => e.name !== movieDatas.name),
+			...movieLikeList.filter((e) => e.title !== movieDatas.title),
 		]);
 	};
 
 	/* Requette au back collecte des films depuis l'API */
+	/* Requette au back collecte des films en likeList */
 	useEffect(() => {
 		let getMoviesDatas = async () => {
 			let rawResponse = await fetch('/get-movies');
 			let response = await rawResponse.json();
 
 			setMoviesDatas(response.results);
-
-			console.log(response.results);
+		};
+		let getLikelist = async () => {
+			let rawResponse = await fetch('/likelist-movie');
+			let response = await rawResponse.json();
+			setMovieLikeList(response);
 		};
 
 		getMoviesDatas();
+		getLikelist();
 	}, []);
 
-	const moviesList = moviesDatas.map((movie, i) => {
+	var moviesList = moviesDatas.map((movie, i) => {
+		var result = movieLikeList.find((item) => item.title === movie.title);
 
-		let result = movieLikeList.find((item) => item.title == movie.name);
-		let isLiked = false;
+		var isLiked = false;
 		if (result != undefined) {
-			isLiked = true
+			isLiked = true;
 		}
 
 		return (
@@ -88,21 +97,23 @@ function App() {
 		);
 	});
 
-	const wishListItems = movieLikeList.map((movie, i) => {
+	var wishListItems = movieLikeList.map((movie, i) => {
 		return (
 			<ListGroupItem>
 				<div className='d-flex justify-content-center align-items-center'>
 					<div>
 						<Image
 							style={{ height: '5em', width: '5em', marginRight: '1em' }}
-							src={movie.img}
+							src={`https://image.tmdb.org/t/p/w500${movie.image}`}
 							roundedCircle
 						/>
-						{movie.name}
+						{movie.title}
 					</div>
 
 					<FontAwesomeIcon
-						onClick={() => delFromList({ name: movie.name, img: movie.img })}
+						onClick={() =>
+							delFromList({ title: movie.title, image: movie.image })
+						}
 						style={{ marginLeft: '1em' }}
 						icon={faTimesCircle}
 					/>
